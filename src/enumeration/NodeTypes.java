@@ -7,8 +7,8 @@ public enum NodeTypes {
     FINISH("F", false),
         ;
 
-    private String code;
-    private boolean isBlock;
+    private final String code;
+    private final boolean isBlock;
 
     NodeTypes(String code, boolean isBlock) {
         this.code = code;

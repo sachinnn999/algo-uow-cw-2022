@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 
 
 public class Main {
-    private final static String FILE_PATH = "src/resource/maze.txt";
+    private final static String FILE_PATH = "src/resource/maze_file.txt";
 
     public static void main(String[] args) {
         System.out.println("Hello Snow Runner!");

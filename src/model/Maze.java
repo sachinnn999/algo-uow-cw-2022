@@ -24,17 +24,15 @@ public class Maze {
 
         int y = 0;
         String[] temp;
-        int xMax = 0,yMax = 0;
+        int xMax = 0;
         while (sc.hasNextLine()) {
             temp = sc.nextLine().split("");
             xMax = temp.length;
             System.out.println(Arrays.toString(temp));
             for (int x = 0; x < temp.length; x++) {
                 if (temp[x].equalsIgnoreCase(NodeTypes.START.getCode())) {
-//                    startNode = new Node(NodeTypes.START, new Position(x, y));
                     startNode = new Node(NodeTypes.START, new Position(x, y));
                 }else if (temp[x].equalsIgnoreCase(NodeTypes.FINISH.getCode())) {
-//                    endNode = new Node(NodeTypes.FINSIH, new Position(x, y));
                     finishNode = new Node(NodeTypes.FINISH, new Position(x, y));
                 }else if (temp[x].equalsIgnoreCase(NodeTypes.ROCK.getCode())){
                     rocks.add(new Position(x,y));
@@ -42,8 +40,27 @@ public class Maze {
             }
             y++;
         }
-        this.xMax = xMax;
-        this.yMax = y;
+        this.xMax = xMax - 1;
+        this.yMax = y- 1;
+    }
+
+    public ArrayList<Position> findRocksByAxis(int x, int y){
+        ArrayList<Position> blocks = new ArrayList<>();
+        if(x >= 0){
+            for (Position p: rocks) {
+                if(p.getX() == x){
+                    blocks.add(p);
+                }
+            }
+        }
+        if(y >= 0){
+            for (Position p: rocks) {
+                if(p.getY() == y){
+                    blocks.add(p);
+                }
+            }
+        }
+        return blocks;
     }
 
     public ArrayList<Position> getRocks() {

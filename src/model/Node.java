@@ -15,13 +15,14 @@ public class Node {
     }
 
     public Node(NodeTypes type, Position position) {
+        super();
         if(type != null) {
             this.type = type;
         }
         this.position = position;
     }
 
-    public Node(Position pos) {
+    public Node(Position position) {
         this.position = position;
     }
 
@@ -50,6 +51,10 @@ public class Node {
         this.g = g;
     }
 
+    public void setG(Node currentNode) {
+        this.g = currentNode.getG() + (Math.abs(currentNode.getPosition().getX() - this.getPosition().getX()) + Math.abs(currentNode.getPosition().getY() - this.getPosition().getY()));
+    }
+
     public int getF() {
         return f;
     }
@@ -64,6 +69,10 @@ public class Node {
 
     public void setH(int h) {
         this.h = h;
+    }
+
+    public void setH(Node finishNode) {
+        setH((int) (Math.pow(finishNode.getPosition().getX() - this.getPosition().getX(),2) + Math.pow(finishNode.getPosition().getY() - this.getPosition().getY(),2)));
     }
 
     public Node getParent() {
@@ -81,7 +90,7 @@ public class Node {
                 ", g=" + g +
                 ", f=" + f +
                 ", h=" + h +
-                ", parent=" + parent +
+//                ", parent=" + parent +
                 '}';
     }
 
