@@ -1,8 +1,11 @@
 package controller;
 
+import exception.CommonException;
 import model.Maze;
+import model.Node;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 
 public class Main {
@@ -13,13 +16,27 @@ public class Main {
         try {
             Maze maze = new Maze();
             maze.init(FILE_PATH);
-            System.out.println(maze);
+//            System.out.println(maze);
             AStar aStar = new AStar(maze);
-            aStar.findPath();
+            ArrayList<Node> path = aStar.findPath();
+            displayPath(path);
+//            System.out.println(path);
+        }catch (CommonException ce){
+            System.err.println(ce.getMessage());
         }catch (FileNotFoundException fio){
             System.err.println("File cannot be found!");
         }catch (Exception e){
-            System.err.println("Something went wrong! error is \n\t" + e);
+            System.err.println("Something went wrong!\n\terror is " + e);
+        }
+    }
+
+    private static void displayPath(ArrayList<Node> path) {
+        if(path == null){
+            System.out.println("Oops! App couldn't find a path.");
+            return ;
+        }
+        for (Node node: path) {
+            System.out.println(node);
         }
     }
 }

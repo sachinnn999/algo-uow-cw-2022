@@ -91,7 +91,7 @@ public class Node {
                 ", f=" + f +
                 ", h=" + h +
 //                ", parent=" + parent +
-                '}';
+                "}\n";
     }
 
     @Override

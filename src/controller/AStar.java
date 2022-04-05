@@ -5,6 +5,7 @@ import model.Node;
 import model.Position;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AStar {
     private final Maze maze;
@@ -19,7 +20,7 @@ public class AStar {
         openList.add(maze.getStartNode());
     }
 
-    public Object findPath() throws Exception{
+    public ArrayList<Node> findPath() throws Exception{
         while (!openList.isEmpty()) {
             currentNode = openList.get(0);
             for (Node node : openList) {
@@ -32,8 +33,7 @@ public class AStar {
 
             //found goal
             if(currentNode.equals(maze.getFinishNode())){
-                Object obj = getPath();
-                return null;
+                return getPath();
             }
             //find possible pathways
             ArrayList<Position> availablePaths = getPossiblePaths();
@@ -91,7 +91,7 @@ public class AStar {
             }
         }
         //down key
-        if(currentPosition.getY() <= maze.getyMax()){
+        if(currentPosition.getY() < maze.getyMax()){
             closeRock = null;
             rocksLocationsByAxis = maze.findRocksByAxis(currentPosition.getX(), -1);
             for (Position p : rocksLocationsByAxis) {
@@ -129,7 +129,7 @@ public class AStar {
             }
         }
         //left
-        if(currentPosition.getX() <= maze.getxMax()){
+        if(currentPosition.getX() < maze.getxMax()){
             closeRock = null;
             rocksLocationsByAxis = maze.findRocksByAxis(-1, currentPosition.getY());
             for (Position p : rocksLocationsByAxis) {
@@ -151,10 +151,16 @@ public class AStar {
         return possiblePaths;
     }
 
-    private Object getPath() {
-        //todo
+    private ArrayList<Node> getPath() {
         System.out.println("finished");
-        System.out.println(closedList);
-        return null;
+//        System.out.println(closedList);
+        ArrayList<Node> path = new ArrayList<>();
+        Node current = currentNode;
+        while(current != null){
+            path.add(current);
+            current = current.getParent();
+        }
+        Collections.reverse(path);
+        return path;
     }
 }

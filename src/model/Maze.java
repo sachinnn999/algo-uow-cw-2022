@@ -1,6 +1,7 @@
 package model;
 
 import enumeration.NodeTypes;
+import exception.CommonException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,11 +25,14 @@ public class Maze {
 
         int y = 0;
         String[] temp;
-        int xMax = 0;
+        int xMax = -1;
         while (sc.hasNextLine()) {
             temp = sc.nextLine().split("");
+            if(xMax >= 0 && xMax != temp.length){
+                throw new CommonException("File is not in format");
+            }
             xMax = temp.length;
-            System.out.println(Arrays.toString(temp));
+//            System.out.println(Arrays.toString(temp));
             for (int x = 0; x < temp.length; x++) {
                 if (temp[x].equalsIgnoreCase(NodeTypes.START.getCode())) {
                     startNode = new Node(NodeTypes.START, new Position(x, y));
