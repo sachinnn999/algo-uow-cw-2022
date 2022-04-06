@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 
 public class Main {
-    private final static String FILE_PATH = "src/resource/maze_file.txt";
+    private final static String FILE_PATH = "src/resource/maze10_5.txt";
+//    private final static String FILE_PATH = "src/resource/puzzle_1280.txt";
 
     public static void main(String[] args) {
         System.out.println("Hello Snow Runner!");

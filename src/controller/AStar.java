@@ -16,11 +16,10 @@ public class AStar {
 
     public AStar(Maze maze) {
         this.maze = maze;
-//        currentNode = maze.getStartNode();
         openList.add(maze.getStartNode());
     }
 
-    public ArrayList<Node> findPath() throws Exception{
+    public ArrayList<Node> findPath(){
         while (!openList.isEmpty()) {
             currentNode = openList.get(0);
             for (Node node : openList) {
@@ -32,7 +31,7 @@ public class AStar {
             closedList.add(currentNode);
 
             //found goal
-            if(currentNode.equals(maze.getFinishNode())){
+            if(currentNode.equals(maze.getFinishNode()) || isFinishNodeInPath()){
                 return getPath();
             }
             //find possible pathways
@@ -40,20 +39,15 @@ public class AStar {
             //find if path is already in the closed list and calc cost
             Node child;
             for (Position p : availablePaths) {
-                if(closedList.contains(new Node(p))){
+                child = new Node(p);
+                if(closedList.contains(child)){
                     continue;
                 }
-                child = new Node(p);
                 child.setParent(currentNode);
                 child.setG(currentNode);
                 child.setH(maze.getFinishNode());
                 child.setF(child.getG() + child.getH());
 
-//                for (Node n: openList) {
-//                    if(n.equals(child) && n.getG() < child.getG()){
-//                        continue;
-//                    }
-//                }
                 int ind = openList.indexOf(child);
                 if( ind >= 0 && openList.get(ind).getG() < child.getG()){
                     continue;
@@ -65,16 +59,46 @@ public class AStar {
         return null;
     }
 
+    private boolean isFinishNodeInPath() {
+        Position finishNodePos = maze.getFinishNode().getPosition();
+        Position currentNodePos = currentNode.getPosition();
+        Position parentNodePos;
+
+//        System.out.println("finishNodePos "+ finishNodePos);
+//        System.out.println("currentNodePos "+ currentNodePos);
+        if(!currentNode.getPosition().equals(maze.getStartNode().getPosition())){
+            parentNodePos = currentNode.getParent().getPosition();
+//            System.out.println("parentNodePos "+ parentNodePos);
+            //x axis
+            int mY = (currentNodePos.getY() + parentNodePos.getY())/2;
+            int a = finishNodePos.getY();
+            int b = parentNodePos.getY();
+            if(parentNodePos.getX() == currentNodePos.getX() && finishNodePos.getX() == currentNodePos.getX()) {
+                return Math.abs(a - mY) <= Math.abs(b - mY);
+            }
+
+            //y axis
+            int mX = (currentNodePos.getX() + parentNodePos.getX())/2;
+            a = finishNodePos.getX();
+            b = parentNodePos.getX();
+            if(parentNodePos.getY() == currentNodePos.getY() && finishNodePos.getY() == currentNodePos.getY()) {
+                return Math.abs(a - mX) <= Math.abs(b - mX);
+            }
+        }
+        return false;
+    }
+
     private ArrayList<Position> getPossiblePaths() {
         ArrayList<Position> possiblePaths  = new ArrayList<>();
-        ArrayList<Position> rocksLocationsByAxis  = new ArrayList<>();
+        ArrayList<Position> rocksLocationsByAxis;
         Position currentPosition = currentNode.getPosition();
         Position closeRock;
 
+        //y axis
+        rocksLocationsByAxis = maze.findRocksByAxis(currentPosition.getX(), -1);
         //up key
         if(currentPosition.getY() > 0){
             closeRock = null;
-            rocksLocationsByAxis = maze.findRocksByAxis(currentPosition.getX(), -1);
             for (Position p : rocksLocationsByAxis) {
                 if(p.getY() < currentPosition.getY()){
                     if(closeRock == null){
@@ -93,7 +117,7 @@ public class AStar {
         //down key
         if(currentPosition.getY() < maze.getyMax()){
             closeRock = null;
-            rocksLocationsByAxis = maze.findRocksByAxis(currentPosition.getX(), -1);
+//            rocksLocationsByAxis = maze.findRocksByAxis(currentPosition.getX(), -1);
             for (Position p : rocksLocationsByAxis) {
                 if(p.getY() >= currentPosition.getY()){
                     if(closeRock == null){
@@ -109,10 +133,11 @@ public class AStar {
                 possiblePaths.add(new Position(currentPosition.getX(), maze.getyMax()));
             }
         }
+        //x axis
+        rocksLocationsByAxis = maze.findRocksByAxis(-1, currentPosition.getY());
         //right key
         if(currentPosition.getX() > 0){
             closeRock = null;
-            rocksLocationsByAxis = maze.findRocksByAxis(-1, currentPosition.getY());
             for (Position p : rocksLocationsByAxis) {
                 if(p.getX() < currentPosition.getX()){
                     if(closeRock == null){
@@ -131,7 +156,7 @@ public class AStar {
         //left
         if(currentPosition.getX() < maze.getxMax()){
             closeRock = null;
-            rocksLocationsByAxis = maze.findRocksByAxis(-1, currentPosition.getY());
+//            rocksLocationsByAxis = maze.findRocksByAxis(-1, currentPosition.getY());
             for (Position p : rocksLocationsByAxis) {
                 if(p.getX() >= currentPosition.getX()){
                     if(closeRock == null){

@@ -32,7 +32,7 @@ public class Maze {
                 throw new CommonException("File is not in format");
             }
             xMax = temp.length;
-//            System.out.println(Arrays.toString(temp));
+            System.out.println(Arrays.toString(temp));
             for (int x = 0; x < temp.length; x++) {
                 if (temp[x].equalsIgnoreCase(NodeTypes.START.getCode())) {
                     startNode = new Node(NodeTypes.START, new Position(x, y));
