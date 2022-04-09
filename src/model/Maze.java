@@ -26,11 +26,14 @@ public class Maze {
         int y = 0;
         String[] temp;
         int xMax = -1;
+        String line;
         while (sc.hasNextLine()) {
-            temp = sc.nextLine().split("");
+            line = sc.nextLine();
+            temp = line.split("");
             if(xMax >= 0 && xMax != temp.length){
                 throw new CommonException("File is not in format");
             }
+//            System.out.println(line);
             xMax = temp.length;
             System.out.println(Arrays.toString(temp));
             for (int x = 0; x < temp.length; x++) {

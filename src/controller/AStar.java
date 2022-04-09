@@ -1,5 +1,6 @@
 package controller;
 
+import enumeration.NodeTypes;
 import model.Maze;
 import model.Node;
 import model.Position;
@@ -19,7 +20,7 @@ public class AStar {
         openList.add(maze.getStartNode());
     }
 
-    public ArrayList<Node> findPath(){
+    public ArrayList<Node> findPath() {
         while (!openList.isEmpty()) {
             currentNode = openList.get(0);
             for (Node node : openList) {
@@ -31,7 +32,7 @@ public class AStar {
             closedList.add(currentNode);
 
             //found goal
-            if(currentNode.equals(maze.getFinishNode()) || isFinishNodeInPath()){
+            if (currentNode.equals(maze.getFinishNode()) || isFinishNodeInPath()) {
                 return getPath();
             }
             //find possible pathways
@@ -40,7 +41,7 @@ public class AStar {
             Node child;
             for (Position p : availablePaths) {
                 child = new Node(p);
-                if(closedList.contains(child)){
+                if (closedList.contains(child)) {
                     continue;
                 }
                 child.setParent(currentNode);
@@ -49,7 +50,7 @@ public class AStar {
                 child.setF(child.getG() + child.getH());
 
                 int ind = openList.indexOf(child);
-                if( ind >= 0 && openList.get(ind).getG() < child.getG()){
+                if (ind >= 0 && openList.get(ind).getG() < child.getG()) {
                     continue;
                 }
                 openList.add(child);
@@ -66,22 +67,22 @@ public class AStar {
 
 //        System.out.println("finishNodePos "+ finishNodePos);
 //        System.out.println("currentNodePos "+ currentNodePos);
-        if(!currentNode.getPosition().equals(maze.getStartNode().getPosition())){
+        if (!currentNode.getPosition().equals(maze.getStartNode().getPosition())) {
             parentNodePos = currentNode.getParent().getPosition();
 //            System.out.println("parentNodePos "+ parentNodePos);
             //x axis
-            int mY = (currentNodePos.getY() + parentNodePos.getY())/2;
+            int mY = (currentNodePos.getY() + parentNodePos.getY()) / 2;
             int a = finishNodePos.getY();
             int b = parentNodePos.getY();
-            if(parentNodePos.getX() == currentNodePos.getX() && finishNodePos.getX() == currentNodePos.getX()) {
+            if (parentNodePos.getX() == currentNodePos.getX() && finishNodePos.getX() == currentNodePos.getX()) {
                 return Math.abs(a - mY) <= Math.abs(b - mY);
             }
 
             //y axis
-            int mX = (currentNodePos.getX() + parentNodePos.getX())/2;
+            int mX = (currentNodePos.getX() + parentNodePos.getX()) / 2;
             a = finishNodePos.getX();
             b = parentNodePos.getX();
-            if(parentNodePos.getY() == currentNodePos.getY() && finishNodePos.getY() == currentNodePos.getY()) {
+            if (parentNodePos.getY() == currentNodePos.getY() && finishNodePos.getY() == currentNodePos.getY()) {
                 return Math.abs(a - mX) <= Math.abs(b - mX);
             }
         }
@@ -89,7 +90,7 @@ public class AStar {
     }
 
     private ArrayList<Position> getPossiblePaths() {
-        ArrayList<Position> possiblePaths  = new ArrayList<>();
+        ArrayList<Position> possiblePaths = new ArrayList<>();
         ArrayList<Position> rocksLocationsByAxis;
         Position currentPosition = currentNode.getPosition();
         Position closeRock;
@@ -97,78 +98,78 @@ public class AStar {
         //y axis
         rocksLocationsByAxis = maze.findRocksByAxis(currentPosition.getX(), -1);
         //up key
-        if(currentPosition.getY() > 0){
+        if (currentPosition.getY() > 0) {
             closeRock = null;
             for (Position p : rocksLocationsByAxis) {
-                if(p.getY() < currentPosition.getY()){
-                    if(closeRock == null){
+                if (p.getY() < currentPosition.getY()) {
+                    if (closeRock == null) {
                         closeRock = p;
-                    }else if(closeRock.getY() < p.getY()){
+                    } else if (closeRock.getY() < p.getY()) {
                         closeRock = p;
                     }
                 }
             }
-            if(closeRock != null){
+            if (closeRock != null) {
                 possiblePaths.add(new Position(closeRock.getX(), closeRock.getY() + 1));
-            }else {
+            } else {
                 possiblePaths.add(new Position(currentPosition.getX(), 0));
             }
         }
         //down key
-        if(currentPosition.getY() < maze.getyMax()){
+        if (currentPosition.getY() < maze.getyMax()) {
             closeRock = null;
 //            rocksLocationsByAxis = maze.findRocksByAxis(currentPosition.getX(), -1);
             for (Position p : rocksLocationsByAxis) {
-                if(p.getY() >= currentPosition.getY()){
-                    if(closeRock == null){
+                if (p.getY() >= currentPosition.getY()) {
+                    if (closeRock == null) {
                         closeRock = p;
-                    }else if(closeRock.getY() > p.getY()){
+                    } else if (closeRock.getY() > p.getY()) {
                         closeRock = p;
                     }
                 }
             }
-            if(closeRock != null){
+            if (closeRock != null) {
                 possiblePaths.add(new Position(closeRock.getX(), closeRock.getY() - 1));
-            }else {
+            } else {
                 possiblePaths.add(new Position(currentPosition.getX(), maze.getyMax()));
             }
         }
         //x axis
         rocksLocationsByAxis = maze.findRocksByAxis(-1, currentPosition.getY());
         //right key
-        if(currentPosition.getX() > 0){
+        if (currentPosition.getX() > 0) {
             closeRock = null;
             for (Position p : rocksLocationsByAxis) {
-                if(p.getX() < currentPosition.getX()){
-                    if(closeRock == null){
+                if (p.getX() < currentPosition.getX()) {
+                    if (closeRock == null) {
                         closeRock = p;
-                    }else if(closeRock.getX() < p.getX()){
+                    } else if (closeRock.getX() < p.getX()) {
                         closeRock = p;
                     }
                 }
             }
-            if(closeRock != null){
+            if (closeRock != null) {
                 possiblePaths.add(new Position(closeRock.getX() + 1, closeRock.getY()));
-            }else {
+            } else {
                 possiblePaths.add(new Position(0, currentPosition.getY()));
             }
         }
         //left
-        if(currentPosition.getX() < maze.getxMax()){
+        if (currentPosition.getX() < maze.getxMax()) {
             closeRock = null;
 //            rocksLocationsByAxis = maze.findRocksByAxis(-1, currentPosition.getY());
             for (Position p : rocksLocationsByAxis) {
-                if(p.getX() >= currentPosition.getX()){
-                    if(closeRock == null){
+                if (p.getX() >= currentPosition.getX()) {
+                    if (closeRock == null) {
                         closeRock = p;
-                    }else if(closeRock.getX() > p.getX()){
+                    } else if (closeRock.getX() > p.getX()) {
                         closeRock = p;
                     }
                 }
             }
-            if(closeRock != null){
+            if (closeRock != null) {
                 possiblePaths.add(new Position(closeRock.getX() - 1, closeRock.getY()));
-            }else {
+            } else {
                 possiblePaths.add(new Position(maze.getxMax(), currentPosition.getY()));
             }
         }
@@ -177,15 +178,48 @@ public class AStar {
     }
 
     private ArrayList<Node> getPath() {
-        System.out.println("finished");
+//        System.out.println("finished");
 //        System.out.println(closedList);
         ArrayList<Node> path = new ArrayList<>();
-        Node current = currentNode;
-        while(current != null){
+        Node current = maze.getFinishNode();
+        current.setParent(currentNode.getParent());
+        while (current != null) {
             path.add(current);
             current = current.getParent();
         }
         Collections.reverse(path);
         return path;
+    }
+
+    public static void displayPath(ArrayList<Node> path) {
+        System.out.println("\n=======Direction=======");
+        if (path == null || path.isEmpty()) {
+            System.out.println("Oops! App couldn't find a path.");
+            return;
+        }
+        Node node, parent;
+        for (int count = 0; count < path.size(); count++) {
+            System.out.printf("%5d. ", count + 1);
+            node = path.get(count);
+            if (node.getType() == NodeTypes.START) {
+                System.out.println("Start at ("+ node.getPosition().getX() +", "+ node.getPosition().getY()+ ")");
+                continue;
+            }
+            parent = node.getParent();
+            if (node.getPosition().getY() == parent.getPosition().getY()) {
+                if (node.getPosition().getX() > parent.getPosition().getX()) {
+                    System.out.println("Move right to (" + node.getPosition().getX() +", "+ node.getPosition().getY()+ ")");
+                } else {
+                    System.out.println("Move left to (" + node.getPosition().getX() +", "+ node.getPosition().getY()+ ")");                }
+            }
+            if (node.getPosition().getX() == parent.getPosition().getX()) {
+                if (node.getPosition().getY() > parent.getPosition().getY()) {
+                    System.out.println("Move up to (" + node.getPosition().getX() +", "+ node.getPosition().getY()+ ")");
+                } else {
+                    System.out.println("Move down to (" + node.getPosition().getX() +", "+ node.getPosition().getY()+ ")");
+                }
+            }
+        }
+        System.out.println("Done!");
     }
 }
