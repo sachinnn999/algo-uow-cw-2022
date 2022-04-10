@@ -1,5 +1,15 @@
 package enumeration;
-
+/** *****************************************************************************
+ *  Name:    Sachin De Silva
+ *  UOW ID:   W1761382
+ *  IIT ID: 2019801
+ *
+ *  Description:  node types details can be found here
+ *
+ *  Written:       02-04-2022
+ *  Last updated:  11-02-2022
+ *
+ **************************************************************************** */
 public enum NodeTypes {
     SNOW("*",false),
     ROCK("0", true),

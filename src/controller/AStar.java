@@ -7,31 +7,46 @@ import model.Position;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+/** *****************************************************************************
+ *  Name:    Sachin De Silva
+ *  UOW ID:   W1761382
+ *  IIT ID: 2019801
+ *
+ *  Description:  will help to find the path using a star algorithm
+ *
+ *  Written:       02-04-2022
+ *  Last updated:  11-02-2022
+ *
+ **************************************************************************** */
 public class AStar {
     private final Maze maze;
     private Node currentNode = null;
     private ArrayList<Node> openList = new ArrayList<>();
     private ArrayList<Node> closedList = new ArrayList<>();
 
-
+    //user defined constructor to assign maze and add start node to the openlist
     public AStar(Maze maze) {
         this.maze = maze;
         openList.add(maze.getStartNode());
     }
 
+    //this will return the completed path if algorithm failed method will return a null value
     public ArrayList<Node> findPath() {
+        //running till openlist is empty or till finding the finish node
         while (!openList.isEmpty()) {
             currentNode = openList.get(0);
+            //sorting open list to the lowest cost
             for (Node node : openList) {
                 if (currentNode.getF() > node.getF()) {
                     currentNode = node;
                 }
             }
+            //removing the lowest cost node
             openList.remove(currentNode);
+            //adding selected lowest cost node to closed list
             closedList.add(currentNode);
 
-            //found goal
+            //found goal or if goal is in the current pathway
             if (currentNode.equals(maze.getFinishNode()) || isFinishNodeInPath()) {
                 return getPath();
             }
@@ -41,14 +56,17 @@ public class AStar {
             Node child;
             for (Position p : availablePaths) {
                 child = new Node(p);
+                //checking if children are in closed list
                 if (closedList.contains(child)) {
                     continue;
                 }
+                //setting up node required values
                 child.setParent(currentNode);
                 child.setG(currentNode);
                 child.setH(maze.getFinishNode());
                 child.setF(child.getG() + child.getH());
 
+                //checking if child node is already in the open list if not adding the child node into openlist
                 int ind = openList.indexOf(child);
                 if (ind >= 0 && openList.get(ind).getG() < child.getG()) {
                     continue;
@@ -60,6 +78,7 @@ public class AStar {
         return null;
     }
 
+    //finding if finishing node is located in current pathway to solve the task
     private boolean isFinishNodeInPath() {
         Position finishNodePos = maze.getFinishNode().getPosition();
         Position currentNodePos = currentNode.getPosition();
@@ -89,6 +108,7 @@ public class AStar {
         return false;
     }
 
+    //this will return  list which contains all accessible pathways
     private ArrayList<Position> getPossiblePaths() {
         ArrayList<Position> possiblePaths = new ArrayList<>();
         ArrayList<Position> rocksLocationsByAxis;
@@ -177,12 +197,14 @@ public class AStar {
         return possiblePaths;
     }
 
+    //this will help to return and finalize the path
     private ArrayList<Node> getPath() {
 //        System.out.println("finished");
 //        System.out.println(closedList);
         ArrayList<Node> path = new ArrayList<>();
         Node current = maze.getFinishNode();
         current.setParent(currentNode.getParent());
+        //reversing the from finish node to get the path
         while (current != null) {
             path.add(current);
             current = current.getParent();
@@ -191,6 +213,7 @@ public class AStar {
         return path;
     }
 
+    //this will help to display a meaningful path map
     public static void displayPath(ArrayList<Node> path) {
         System.out.println("\n=======Direction=======");
         if (path == null || path.isEmpty()) {

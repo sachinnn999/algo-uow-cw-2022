@@ -8,6 +8,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/** *****************************************************************************
+ *  Name:    Sachin De Silva
+ *  UOW ID:   W1761382
+ *  IIT ID: 2019801
+ *
+ *  Description:  will help to initialize and store the maze details
+ *
+ *  Written:       02-04-2022
+ *  Last updated:  11-02-2022
+ *
+ **************************************************************************** */
 public class Maze {
     private ArrayList<Position> rocks = new ArrayList<>();
     private Node startNode;
@@ -27,6 +38,7 @@ public class Maze {
         String[] temp;
         int xMax = -1;
         String line;
+        //reading the file line by line
         while (sc.hasNextLine()) {
             line = sc.nextLine();
             temp = line.split("");
@@ -36,6 +48,7 @@ public class Maze {
 //            System.out.println(line);
             xMax = temp.length;
             System.out.println(Arrays.toString(temp));
+            //identifying nodes
             for (int x = 0; x < temp.length; x++) {
                 if (temp[x].equalsIgnoreCase(NodeTypes.START.getCode())) {
                     startNode = new Node(NodeTypes.START, new Position(x, y));
@@ -47,10 +60,13 @@ public class Maze {
             }
             y++;
         }
+        //assigning maze height and width
         this.xMax = xMax - 1;
         this.yMax = y- 1;
     }
 
+    //this method will find the all the rocks by given axis codes
+    //note:- send -1 to the ignorant axis
     public ArrayList<Position> findRocksByAxis(int x, int y){
         ArrayList<Position> blocks = new ArrayList<>();
         if(x >= 0){
